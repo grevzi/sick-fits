@@ -1,0 +1,9 @@
+/mongodb/database
+/frontend/node_modules
+/backend/node_modules
+
+.vscode
+.idea
+.keystone
+.next
+.env
