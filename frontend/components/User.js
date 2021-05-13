@@ -11,11 +11,15 @@ export const CURRENT_USER_QUERY = gql`
 #                TODO query the cart
             }
         }
-     }
+    }
 `
 
 export const useUser = () => {
-    const {data} = useQuery(CURRENT_USER_QUERY);
+    const {data, error, loading} = useQuery(CURRENT_USER_QUERY);
 
-    return data?.authenticatedItem;
+    return {
+        user: data?.authenticatedItem,
+        error,
+        loading
+    };
 }

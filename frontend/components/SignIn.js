@@ -4,54 +4,53 @@ import {gql} from "@apollo/client/core";
 import {useMutation} from "@apollo/client";
 import {CURRENT_USER_QUERY} from "./User";
 import ErrorMessage from "./ErrorMessage";
+import Router from "next/router";
 
-const SIGNUP_MUTATION = gql`
-    mutation SIGNUP_MUTATION($email: String!, $name: String!, $password: String!) {
-        createUser(data: {email: $email, name: $name, password: $password}) {
-            id
-            email
-            name
+const SIGNIN_MUTATION = gql`
+    mutation SIGNIN_MUTATION($email: String!, $password: String!) {
+        authenticateUserWithPassword(email: $email, password: $password) {
+            ... on UserAuthenticationWithPasswordSuccess {
+                sessionToken
+                item {
+                    id
+                    email
+                    name
+                }
+            }
+            ... on UserAuthenticationWithPasswordFailure {
+                code
+                message
+            }
         }
     }
 `
 
-export default function SingUp() {
+export default function SignIn() {
     const {inputs, handleChange, resetForm} = useForm({
         email   : '',
-        name   : '',
         password: '',
     })
 
-    const [signup, {data, error, loading}] = useMutation(SIGNUP_MUTATION, {
+    const [signin, {data, loading}] = useMutation(SIGNIN_MUTATION, {
         variables     : inputs,
-        // refetchQueries: [{query: CURRENT_USER_QUERY}]
+        refetchQueries: [{query: CURRENT_USER_QUERY}]
     })
 
     const handleSubmit = async e => {
         e.preventDefault()
-        await signup().catch(console.error)
-        console.log(data, error);
-        // resetForm()
+        await signin()
+        resetForm()
+        Router.push({
+            pathname: `/`
+        })
     }
-
+    const error = data?.authenticateUserWithPassword.__typename == 'UserAuthenticationWithPasswordFailure'
+        ? data?.authenticateUserWithPassword : undefined
     return (
         <Form method="POST" onSubmit={handleSubmit}>
-            <h2>Sign Up for an account</h2>
+            <h2>Sign in to your account</h2>
             <ErrorMessage error={error} />
             <fieldset>
-                {data?.createUser && <p>Signed Up with {data?.createUser.email} - please go head and sign in</p>}
-                <label htmlFor="name">
-                    Your Name
-                    <input
-                        type="text"
-                        name="name"
-                        placeholder="Your name"
-                        autoComplete="name"
-                        value={inputs.name}
-                        onChange={handleChange}
-                    />
-                </label>
-
                 <label htmlFor="email">
                     Email
                     <input
@@ -76,7 +75,7 @@ export default function SingUp() {
                     />
                 </label>
 
-                <button type="submit">Sign Up</button>
+                <button type="submit">Sign In</button>
             </fieldset>
 
         </Form>

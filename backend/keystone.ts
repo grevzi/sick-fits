@@ -6,6 +6,7 @@ import {User} from "./schemas/User";
 import {Product} from "./schemas/Product";
 import {ProductImage} from "./schemas/ProductImage";
 import {insertSeedData} from "./seed-data";
+import {sendResetPasswordEmail} from "./lib/mail";
 
 const databaseURL = process.env.DATABASE_URL || ''
 
@@ -21,6 +22,12 @@ const {withAuth} = createAuth({
     initFirstItem: {
         fields: ['name', 'email', 'password'],
         //TODO add roles
+    },
+    passwordResetLink: {
+        async sendToken(args) {
+            console.log(args);
+            await sendResetPasswordEmail(args.token, args.identity)
+        }
     }
 })
 

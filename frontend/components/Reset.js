@@ -5,49 +5,42 @@ import {useMutation} from "@apollo/client";
 import {CURRENT_USER_QUERY} from "./User";
 import ErrorMessage from "./ErrorMessage";
 
-const SIGNIN_MUTATION = gql`
-    mutation SIGNIN_MUTATION($email: String!, $password: String!) {
-        authenticateUserWithPassword(email: $email, password: $password) {
-            ... on UserAuthenticationWithPasswordSuccess {
-                sessionToken
-                item {
-                    id
-                    email
-                    name
-                }
-            }
-            ... on UserAuthenticationWithPasswordFailure {
-                code
-                message
-            }
+const RESET_MUTATION = gql`
+    mutation RESET_MUTATION($email: String!, $password: String!, $token: String!) {
+        redeemUserPasswordResetToken(email: $email, password: $password, token: $token) {
+            code
+            message
         }
     }
 `
 
-export default function SingIn() {
+export default function Reset({token}) {
     const {inputs, handleChange, resetForm} = useForm({
         email   : '',
         password: '',
+        token   : token
     })
 
-    const [signin, {data, loading}] = useMutation(SIGNIN_MUTATION, {
-        variables     : inputs,
-        refetchQueries: [{query: CURRENT_USER_QUERY}]
+    const [resetPassword, {data, error}] = useMutation(RESET_MUTATION, {
+        variables: inputs,
+        // refetchQueries: [{query: CURRENT_USER_QUERY}]
     })
+
+    let errorMessage = error ? error : data?.redeemUserPasswordResetToken?.code ? data?.redeemUserPasswordResetToken : undefined
 
     const handleSubmit = async e => {
         e.preventDefault()
-        await signin()
-        console.log(data, error);
-        // resetForm()
+        await resetPassword().catch(console.error)
+        resetForm()
     }
-    const error = data?.authenticateUserWithPassword.__typename == 'UserAuthenticationWithPasswordFailure'
-        ? data?.authenticateUserWithPassword : undefined
+
     return (
         <Form method="POST" onSubmit={handleSubmit}>
-            <h2>Sign in to your account</h2>
-            <ErrorMessage error={error} />
+            <h2>Reset Your Password</h2>
+            <ErrorMessage error={errorMessage}/>
             <fieldset>
+                {data?.redeemUserPasswordResetToken === null && <p>Success! You can now sign in.</p>}
+
                 <label htmlFor="email">
                     Email
                     <input
@@ -72,7 +65,9 @@ export default function SingIn() {
                     />
                 </label>
 
-                <button type="submit">Sign In</button>
+                <input type="hidden" value={inputs.token}/>
+
+                <button type="submit">Request Reset</button>
             </fieldset>
 
         </Form>

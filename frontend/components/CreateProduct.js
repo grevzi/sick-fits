@@ -1,5 +1,4 @@
 import Form from "./styles/Form";
-import {useState} from "react";
 import useForm from "../lib/useForm";
 import {gql} from "@apollo/client/core";
 import {useMutation} from "@apollo/client";
@@ -44,7 +43,7 @@ const CreateProduct = () => {
     })
 
     const [createProduct, {loading, error, data}] = useMutation(CREATE_PRODUCT_MUTATION, {
-        variables: inputs,
+        variables     : inputs,
         refetchQueries: [{query: ALL_PRODUCTS_QUERY}]
     })
 
