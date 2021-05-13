@@ -1,6 +1,11 @@
-import SingIn from "../components/SingIn";
-import SingUp from "../components/SingUp";
+import SignIn from "../components/SignIn";
+import SignUp from "../components/SignUp";
 import styled from "styled-components";
+import {useUser} from "../components/User";
+import {useEffect} from "react";
+import Router from "next/router";
+import DisplayError from "../components/ErrorMessage";
+import RequestReset from "../components/RequestReset";
 
 const GridStyles = styled.div`
   display: grid;
@@ -9,9 +14,21 @@ const GridStyles = styled.div`
 `
 
 const SignInPage = () => {
+
+    const {user, loading} = useUser()
+
+    useEffect(() => {
+        if (user) {
+            Router.push({
+                pathname: `/`
+            })
+        }
+    }, [user])
+
     return <GridStyles>
-        <SingIn />
-        <SingUp />
+        <SignIn />
+        <SignUp />
+        <RequestReset />
     </GridStyles>
 }
 

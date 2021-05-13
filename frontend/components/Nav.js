@@ -4,7 +4,7 @@ import {useUser} from "./User";
 import SignOut from "./SignOut";
 
 const Nav = () => {
-    const user = useUser()
+    const {user} = useUser()
     return (
         <NavStyles>
             <Link href="/products">Products</Link>
