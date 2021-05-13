@@ -53,6 +53,6 @@ export default withAuth(config({
         }
     },
     session: withItemData(statelessSessions(sessionConfig), {
-        User: 'id'
+        User: 'id name email'
     })
 }))
