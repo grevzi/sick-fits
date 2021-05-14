@@ -5,9 +5,9 @@ import PriceTag from "./styles/PriceTag";
 import {formatMoney} from "../lib/formatMoney";
 import DeleteProductButton from "./DeleteProductButton";
 import {useCart} from "../lib/CartStateProvider";
+import AddToCart from "./AddToCart";
 
 const Product = ({product}) => {
-    const {open, setOpen} = useCart()
     return (
         <ItemStyles>
             <img src={product?.photo?.image?.publicUrlTransformed} alt={product?.photo?.altText}/>
@@ -29,7 +29,7 @@ const Product = ({product}) => {
                 <DeleteProductButton id={product.id}>
                     Delete 🗑
                 </DeleteProductButton>
-                <button type="button" onClick={() => setOpen(prev => !prev)}>Add to Cart</button>
+                <AddToCart id={product.id} />
             </div>
         </ItemStyles>
     )

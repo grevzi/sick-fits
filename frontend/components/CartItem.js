@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import {formatMoney} from "../lib/formatMoney";
 import calcTotalPrice from "../lib/calcTotalPrice";
+import RemoveFromCart from "./RemoveFromCart";
 
 const CartItemStyles = styled.li`
   padding: 1rem 0;
@@ -19,8 +20,6 @@ const CartItemStyles = styled.li`
 `
 
 const CartItem = ({cartItem}) => {
-
-    console.log(cartItem);
     const {product} = cartItem
 
     if (!product) return null
@@ -40,6 +39,7 @@ const CartItem = ({cartItem}) => {
                     <em>{cartItem.quantity} &times; {formatMoney(product.price)} each</em>
                 </p>
             </div>
+            <RemoveFromCart id={cartItem.id} />
         </CartItemStyles>
     )
 }
