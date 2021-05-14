@@ -4,8 +4,10 @@ import Link from "next/link";
 import PriceTag from "./styles/PriceTag";
 import {formatMoney} from "../lib/formatMoney";
 import DeleteProductButton from "./DeleteProductButton";
+import {useCart} from "../lib/CartStateProvider";
 
 const Product = ({product}) => {
+    const {open, setOpen} = useCart()
     return (
         <ItemStyles>
             <img src={product?.photo?.image?.publicUrlTransformed} alt={product?.photo?.altText}/>
@@ -17,7 +19,7 @@ const Product = ({product}) => {
             <div className="buttonList">
                 <Link href={{
                     pathname: '/update',
-                    query: {
+                    query   : {
                         id: product.id
                     }
                 }}>
@@ -27,6 +29,7 @@ const Product = ({product}) => {
                 <DeleteProductButton id={product.id}>
                     Delete 🗑
                 </DeleteProductButton>
+                <button type="button" onClick={() => setOpen(prev => !prev)}>Add to Cart</button>
             </div>
         </ItemStyles>
     )
