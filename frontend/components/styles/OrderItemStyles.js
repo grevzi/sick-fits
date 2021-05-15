@@ -39,6 +39,9 @@ const OrderItemStyles = styled.li`
       margin-bottom: 1rem;
     }
   }
+  a {
+    text-decoration: none;
+  }
 `;
 
 export default OrderItemStyles;
