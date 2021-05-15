@@ -30,7 +30,9 @@ const Nav = () => {
                         aria-controls='cart'
                     >
                         My Cart
-                        <CartCount count={user.cart.reduce((rez, item) => rez + item.quantity, 0)} />
+                        <CartCount count={user.cart.reduce((rez, item) => {
+                            rez + (item.product ? item.quantity : 0)
+                        }, 0)} />
                     </Button>
                     <SignOut/>
                 </>

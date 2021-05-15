@@ -9,6 +9,8 @@ import {useCart} from "../lib/CartStateProvider";
 import styled from "styled-components";
 import CloseButton from "./styles/CloseButton";
 import RemoveFromCart from "./RemoveFromCart";
+import CheckoutForm from "./Checkout";
+import Checkout from "./Checkout";
 
 const Backdrop = styled.button`
   cursor: pointer;
@@ -43,6 +45,7 @@ const Cart = props => {
 
                 <footer>
                     <p>{formatMoney(calcTotalPrice(user.cart))}</p>
+                    <Checkout />
                 </footer>
             </CartStyles>
             <Backdrop onClick={closeCart} open={open}/>
