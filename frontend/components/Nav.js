@@ -21,7 +21,6 @@ const Nav = () => {
                 <>
                     <Link href="/sell">Sell</Link>
                     <Link href="/orders">Orders</Link>
-                    <Link href="/account">Account</Link>
                     <Button
                         id="my-cart"
                         type="button"
